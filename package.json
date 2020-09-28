@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Vera-Galenko/tinyapp/issues"
   },
-  "homepage": "https://github.com/Vera-Galenko/tinyapp#readme"
+  "homepage": "https://github.com/Vera-Galenko/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
