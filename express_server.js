@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const PORT = 8080;
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 
@@ -25,6 +28,14 @@ app.get("/urls", (req, res) => {
     const templateVars = { urls: urlDatabase };
     res.render("urls_index", templateVars);
   });
+  app.post("/urls", (req, res) => {
+    console.log(req.body);  // Log the POST request body to the console
+    res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  });
+
+app.get("/urls/new", (req, res) => {
+    res.render("urls_new");
+  });
 
 app.get("/urls/:shortURL", (req, res) => {
     const templateVars = { shortURL: req.params.shortURL, longURL: req.params.longURL };
@@ -33,3 +44,11 @@ app.get("/urls/:shortURL", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
+function generateRandomString() {
+ let newURL = "";
+  newURL = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 6);;
+  return newURL;
+}
+
+console.log(generateRandomString());
