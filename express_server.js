@@ -14,6 +14,11 @@ const urlDatabase = {
     "9sm5xK": "http://www.google.com"
 };
 
+const urlDatabase2 = {
+    b6UTxQ: { shortUrl:"b2xVn2", longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+    i3BoGr: { shortURL: "9sm5xK", longURL: "https://www.google.ca", userID: "aJ48lW" }
+};
+
 const users = { 
     "userRandomID": {
       id: "userRandomID", 
@@ -60,11 +65,22 @@ app.post('/logout', (req, res) => {
 
 // NEW URL************************************************
 
-  app.get("/urls/new", (req, res) => {
-    const templateVars = { username: req.cookies.userId,
+//   app.get("/urls/new", (req, res) => {
+//     const templateVars = { username: req.cookies.userId,
+//         username: req.cookies.userId  };
+//     res.render("urls_new", templateVars);
+// });
+
+app.get("/urls/new", (req, res) => {
+    if(req.cookies.userId){
+        const templateVars = { username: req.cookies.userId,
         username: req.cookies.userId  };
-    res.render("urls_new", templateVars);
+        res.render("urls_new", templateVars);
+    } else{
+       res.render("login");
+    }
 });
+
 
 
 app.get("/urls/:shortURL", (req, res) => {
