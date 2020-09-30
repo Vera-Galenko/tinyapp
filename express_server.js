@@ -37,15 +37,9 @@ app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
 });
 
-
+// MAIN PAGE****************************
 
 app.get("/urls", (req, res) => {
-    // for (let key in urlDatabase) {
-    //     let userID = urlDatabase[key].userID
-    //     if (req.session.user_id === userID) {
-    //       myUrls[key] = urlDatabase[key];
-        
-    // const templateVars = { urls: urlDatabase };
     const templateVars = { urls: urlDatabase,
         username: req.cookies.userId };
     res.render("urls_index", templateVars);
@@ -53,26 +47,24 @@ app.get("/urls", (req, res) => {
 
 app.post("/urls", (req, res) => {
     console.log('posted')
-    // console.log(req.body);  // Log the POST request body to the console
-    // res.send("Ok");
     const shortURL = generateRandomString();
     urlDatabase[shortURL] = req.body.longURL;
     res.redirect(`/urls/${shortURL}`);
-    // res.redirect('/urls');
-    
-    // Respond with 'Ok' (we will replace this)
 });
 
-app.get("/urls/new", (req, res) => {
-    const templateVars = { username: req.cookies.userId,
-        username: req.cookies.userId  };
-    res.render("urls_new", templateVars);
-});
 
 app.post('/logout', (req, res) => {
     res.clearCookie('userId');
     res.redirect('/urls');
   });
+
+// NEW URL************************************************
+
+  app.get("/urls/new", (req, res) => {
+    const templateVars = { username: req.cookies.userId,
+        username: req.cookies.userId  };
+    res.render("urls_new", templateVars);
+});
 
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -80,6 +72,8 @@ app.get("/urls/:shortURL", (req, res) => {
         username: req.cookies.userId };
     res.render("urls_show", templateVars);
 });
+
+// DELETE URL**************************************************
 
 app.post('/urls/:shortURL/delete', (req, res) => {
     delete urlDatabase[req.params.shortURL];
@@ -91,10 +85,35 @@ app.post('/urls/:shortURL', (req, res) => {
     res.redirect('/urls');
 });
 
+// REGISTER FUNCTIONS**********************
+
+
 app.get('/register', (req, res) => {
     const templateVars = { error: null }
     res.render("register", templateVars);
   });
+
+app.post('/register', (req, res) => {
+    const id = generateRandomString(6);
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (checkEmail(users, email, password)) {
+        res.send('404');
+      } else {
+        const newUser = {
+            id,
+            email,
+            password
+        };
+        users[id] = newUser;
+        res.cookie('userId', email);
+        console.log(users);
+        res.redirect('/urls');
+      }
+});
+
+// LOGIN FUNCTIONS******************************
 
 app.get("/login", (req, res) => {
     const templateVars = { error: null }
@@ -116,25 +135,7 @@ app.post('/login', (req, res) => {
     }
 })
 
-app.post('/register', (req, res) => {
-    const id = generateRandomString(6);
-    const email = req.body.email;
-    const password = req.body.password;
 
-    if (checkEmail(users, email, password)) {
-        res.send('404');
-      } else {
-        const newUser = {
-            id,
-            email,
-            password
-        };
-        users[id] = newUser;
-        res.cookie('userId', email);
-        console.log(users);
-        res.redirect('/urls');
-      }
-});
 
 app.get("/u/:shortURL", (req, res) => {
     // const longURL = urlDatabase[req.params.shortURL];
