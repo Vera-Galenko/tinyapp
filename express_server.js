@@ -85,6 +85,17 @@ app.post('/urls/:shortURL', (req, res) => {
     res.redirect('/urls');
 })
 
+app.get("/login", (req, res) => {
+    const templateVars = { error: null }
+    res.render("login", templateVars);
+  });
+
+app.post('/login', (req, res) => {
+    console.log(req.body);
+    // urlDatabase[req.params.shortURL] = req.body.longURL;
+    res.render('login')
+})
+
 app.get("/u/:shortURL", (req, res) => {
     // const longURL = urlDatabase[req.params.shortURL];
     res.redirect(longURL);
