@@ -37,9 +37,7 @@ app.get("/urls.json", (req, res) => {
     res.json(urlDatabase);
 });
 
-// app.get("/hello", (req, res) => {
-//     res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
+
 
 app.get("/urls", (req, res) => {
     // for (let key in urlDatabase) {
@@ -70,12 +68,6 @@ app.get("/urls/new", (req, res) => {
         username: req.cookies.userId  };
     res.render("urls_new", templateVars);
 });
-
-// app.post('/login', (req, res) => {
-//     const userId = req.body.username;
-//     res.cookie('userId', userId); // set the cookie's key and value
-//     res.redirect('/urls');
-// });
 
 app.post('/logout', (req, res) => {
     res.clearCookie('userId');
