@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
+const { validateUser, checkEmail } = require('./helpers')
 const cookieParser = require('cookie-parser')
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -12,6 +13,19 @@ const urlDatabase = {
     "b2xVn2": "http://www.lighthouselabs.ca",
     "9sm5xK": "http://www.google.com"
 };
+
+const users = { 
+    "userRandomID": {
+      id: "userRandomID", 
+      email: "user@example.com", 
+      password: "purple-monkey-dinosaur"
+    },
+   "user2RandomID": {
+      id: "user2RandomID", 
+      email: "user2@example.com", 
+      password: "dishwasher-funk"
+    }
+  };
 
 
 
@@ -57,11 +71,11 @@ app.get("/urls/new", (req, res) => {
     res.render("urls_new", templateVars);
 });
 
-app.post('/login', (req, res) => {
-    const userId = req.body.username;
-    res.cookie('userId', userId); // set the cookie's key and value
-    res.redirect('/urls');
-});
+// app.post('/login', (req, res) => {
+//     const userId = req.body.username;
+//     res.cookie('userId', userId); // set the cookie's key and value
+//     res.redirect('/urls');
+// });
 
 app.post('/logout', (req, res) => {
     res.clearCookie('userId');
@@ -77,13 +91,18 @@ app.get("/urls/:shortURL", (req, res) => {
 
 app.post('/urls/:shortURL/delete', (req, res) => {
     delete urlDatabase[req.params.shortURL];
-    res.redirect('/urls')
-})
+    res.redirect('/urls');
+});
 
 app.post('/urls/:shortURL', (req, res) => {
     urlDatabase[req.params.shortURL] = req.body.longURL;
     res.redirect('/urls');
-})
+});
+
+app.get('/register', (req, res) => {
+    const templateVars = { error: null }
+    res.render("register", templateVars);
+  });
 
 app.get("/login", (req, res) => {
     const templateVars = { error: null }
@@ -91,10 +110,39 @@ app.get("/login", (req, res) => {
   });
 
 app.post('/login', (req, res) => {
-    console.log(req.body);
-    // urlDatabase[req.params.shortURL] = req.body.longURL;
-    res.render('login')
+    console.log(req.body)
+    const id = generateRandomString(6);
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (validateUser(users, email, password)){
+        const userId = req.body.email;
+        res.cookie('userId', userId); // set the cookie's key and value
+        res.redirect('/urls');
+    } else {
+        res.send("Wrong data");
+    }
 })
+
+app.post('/register', (req, res) => {
+    const id = generateRandomString(6);
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (checkEmail(users, email, password)) {
+        res.send('404');
+      } else {
+        const newUser = {
+            id,
+            email,
+            password
+        };
+        users[id] = newUser;
+        res.cookie('userId', email);
+        console.log(users);
+        res.redirect('/urls');
+      }
+});
 
 app.get("/u/:shortURL", (req, res) => {
     // const longURL = urlDatabase[req.params.shortURL];
