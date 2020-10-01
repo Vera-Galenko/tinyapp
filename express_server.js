@@ -107,19 +107,27 @@ app.get("/urls/:shortURL", (req, res) => {
 //editing exsisting URLs----------------------------------------------
 
 app.post('/urls/:shortURL', (req, res) => {
+    if(urlDatabase2[req.params.shortURL].userID === req.session.id){
+        urlDatabase2[req.params.shortURL].longURL = req.body.longURL;
+        res.redirect('/urls');
+    } else {
+        res.render("login");
+    }
+      
+    });
     
-    urlDatabase2[req.params.shortURL].longURL = req.body.longURL;
-    urlDatabase2[req.params.shortURL].userID = req.session.id;
-   
-    res.redirect('/urls');
-});
 
 
 // DELETE URL*********************************************************************************
 
 app.post('/urls/:shortURL/delete', (req, res) => {
-    delete urlDatabase2[req.params.shortURL];
-    res.redirect('/urls');
+    if(urlDatabase2[req.params.shortURL].userID === req.session.id){
+        delete urlDatabase2[req.params.shortURL];
+        res.redirect('/urls');
+    } else {
+        res.render("login");
+    }
+  
 });
 
 
