@@ -11,13 +11,42 @@ const checkEmail = ( db, email, password ) => {
 
 
 
-const validateUser = ( db, email, password ) => {
+const validateUser = (bcrypt, db, email, password ) => {
   for (const id in db) {
     const currentUser = db[id];
-    if (email === currentUser.email && password === currentUser.password){
-      return true;
+    if (email === currentUser.email){
+      console.log('email matching');
+      if (bcrypt.compareSync(password, currentUser.password)) {
+        console.log('password matching');
+        return currentUser;
+    } else {
+      return null
+    }
+  } else {
+    console.log('email not matching')
+  }
+}
+return null
+}
+  
+
+
+const isUsersLink = function (object, id) {
+  let usersObject = {};
+  for (let key in object) {
+    if (object[key].userID === id) {
+      usersObject[key] = object[key];
+      console.log('key', object[key]);
     }
   }
-  return false;
+  return usersObject;
 }
-  module.exports = { checkEmail, validateUser }
+
+// const matchKey = function(obj, key){
+//   for (let item in obj){
+//       if(users[item].email === key)
+//       return users[item].id;
+//   }
+// }
+
+  module.exports = { checkEmail, validateUser, isUsersLink }
