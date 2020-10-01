@@ -3,7 +3,7 @@ const app = express();
 const PORT = 8080;
 const cookieSession = require('cookie-session');
 const bodyParser = require("body-parser");
-const { validateUser, checkEmail, isUsersLink, getUserByEmail } = require('./helpers');
+const { validateUser, checkEmail, isUsersLink, getUserByEmail, generateRandomString } = require('./helpers');
 const bcrypt = require('bcrypt');
 const salt = bcrypt.genSaltSync(10);
 
@@ -217,9 +217,4 @@ app.listen(PORT, () => {
 });
 
 
-function generateRandomString() {
-    let newURL = "";
-    newURL = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 6);
-    return newURL;
-}
 

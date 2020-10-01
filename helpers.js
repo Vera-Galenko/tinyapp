@@ -5,7 +5,7 @@ const checkEmail = ( db, email, password ) => {
       }
     return false;
   };
-  
+
 
   const getUserByEmail = function(email, db) {
     for (const id in db) {
@@ -51,7 +51,11 @@ const isUsersLink = function (object, id) {
   return usersObject;
 };
 
+const generateRandomString = function () {
+    let newURL = "";
+    newURL = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 6);
+    return newURL;
+}
 
 
-
-  module.exports = { checkEmail, validateUser, isUsersLink, getUserByEmail }
+  module.exports = { checkEmail, validateUser, isUsersLink, getUserByEmail, generateRandomString  }
