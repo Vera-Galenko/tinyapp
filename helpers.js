@@ -1,16 +1,25 @@
 const checkEmail = ( db, email, password ) => {
-    for (const id in db) {
-      const currentUser = db[id];
-      if (email === "" || password === "" || currentUser.email === email) {
+      if (email === "" || password === "") {
         console.log('email & password are empty');
         return true;
       }
+    return false;
+  };
+  
+
+  const getUserByEmail = function(email, db) {
+    for (const id in db) {
+      const currentUser = db[id];
+    if(currentUser.email === email){
+      return true;
     }
     return false;
+  }
   };
 
 
-
+ 
+  
 const validateUser = (bcrypt, db, email, password ) => {
   for (const id in db) {
     const currentUser = db[id];
@@ -24,6 +33,7 @@ const validateUser = (bcrypt, db, email, password ) => {
     }
   } else {
     console.log('email not matching')
+    return false;
   }
 }
 return null
@@ -39,7 +49,9 @@ const isUsersLink = function (object, id) {
     }
   }
   return usersObject;
-}
+};
 
 
-  module.exports = { checkEmail, validateUser, isUsersLink }
+
+
+  module.exports = { checkEmail, validateUser, isUsersLink, getUserByEmail }

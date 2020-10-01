@@ -3,7 +3,7 @@ const app = express();
 const PORT = 8080;
 const cookieSession = require('cookie-session');
 const bodyParser = require("body-parser");
-const { validateUser, checkEmail, isUsersLink } = require('./helpers');
+const { validateUser, checkEmail, isUsersLink, getUserByEmail } = require('./helpers');
 const bcrypt = require('bcrypt');
 const salt = bcrypt.genSaltSync(10);
 
@@ -143,24 +143,31 @@ app.get('/register', (req, res) => {
 
 //regestration process---------------------------------------------------
 
+
+
 app.post('/register', (req, res) => {
     const id = generateRandomString(6);
     const email = req.body.email;
     const prePassword = req.body.password;
     const password = bcrypt.hashSync(prePassword, salt);
-    if (checkEmail(users, email, password)) {
-        res.send('404');
-      } else {
-        const newUser = {
-            id,
-            email,
-            password
-        };
-        users[id] = newUser;
-        req.session.email = email;
-        req.session.id = id;
-        res.redirect('/urls');
-      }
+    if(getUserByEmail(email, users)){
+        res.render('login');  
+    } else {
+        if (checkEmail(users, email, password)) {
+            res.send('404');
+          } else {
+            const newUser = {
+                id,
+                email,
+                password
+            };
+            users[id] = newUser;
+            req.session.email = email;
+            req.session.id = id;
+            res.redirect('/urls');
+          }
+    }
+   
 });
 
 // LOGIN FUNCTIONS*****************************************************************
@@ -193,10 +200,10 @@ app.post('/login', (req, res) => {
         req.session.id = id;
         res.redirect('/urls');
     } else {
-        res.send("Wrong data");
         res.redirect('/register');
     }
 });
+
 
 // *************************************************************************************
 
