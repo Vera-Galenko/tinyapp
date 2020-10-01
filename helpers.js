@@ -27,7 +27,7 @@ const validateUser = (bcrypt, db, email, password ) => {
   }
 }
 return null
-}
+};
   
 
 
@@ -36,17 +36,10 @@ const isUsersLink = function (object, id) {
   for (let key in object) {
     if (object[key].userID === id) {
       usersObject[key] = object[key];
-      console.log('key', object[key]);
     }
   }
   return usersObject;
 }
 
-// const matchKey = function(obj, key){
-//   for (let item in obj){
-//       if(users[item].email === key)
-//       return users[item].id;
-//   }
-// }
 
   module.exports = { checkEmail, validateUser, isUsersLink }
