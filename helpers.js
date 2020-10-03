@@ -1,6 +1,5 @@
-const checkEmail = ( db, email, password ) => {
+const checkEmail = (email, password ) => { //checks if the fields"password" & " email" are empty
       if (email === "" || password === "") {
-        console.log('email & password are empty');
         return true;
       }
     return false;
@@ -20,19 +19,16 @@ const checkEmail = ( db, email, password ) => {
 
  
   
-const validateUser = (bcrypt, db, email, password ) => {
+const validateUser = (bcrypt, db, email, password ) => {   //checks if the entered password matches with the data base
   for (const id in db) {
     const currentUser = db[id];
     if (email === currentUser.email){
-      console.log('email matching');
       if (bcrypt.compareSync(password, currentUser.password)) {
-        console.log('password matching');
         return currentUser;
     } else {
       return null
     }
   } else {
-    console.log('email not matching')
     return false;
   }
 }
