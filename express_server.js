@@ -170,7 +170,7 @@ app.post('/register', (req, res) => {
                 password
             };
             users[id] = newUser;
-            req.session.email = email;                                          //set cookie session
+            req.session.email = email;                                       //set cookie session
             req.session.id = id;
             res.redirect('/urls');
           }

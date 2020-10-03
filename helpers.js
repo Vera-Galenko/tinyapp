@@ -6,7 +6,7 @@ const checkEmail = (email, password ) => { //checks if the fields"password" & " 
   };
 
 
-  const getUserByEmail = function(email, db) {
+  const getUserByEmail = function(email, db) { //checks if the entered email corresponds with the data base
     for (const id in db) {
       const currentUser = db[id];
     if(currentUser.email === email){
@@ -24,20 +24,18 @@ const validateUser = (bcrypt, db, email, password ) => {   //checks if the enter
     const currentUser = db[id];
     if (email === currentUser.email){
       if (bcrypt.compareSync(password, currentUser.password)) {
-        return currentUser;
-    } else {
-      return null
+        return true;
+      } else {
+        return false;
+      } 
     }
-  } else {
-    return false;
   }
-}
-return null
+   return false;
 };
   
 
 
-const isUsersLink = function (object, id) {
+const isUsersLink = function (object, id) { // filters the url db and constructs the list of urls for the user
   let usersObject = {};
   for (let key in object) {
     if (object[key].userID === id) {
@@ -47,7 +45,7 @@ const isUsersLink = function (object, id) {
   return usersObject;
 };
 
-const generateRandomString = function () {
+const generateRandomString = function () { // generates a random string
     let newURL = "";
     newURL = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 6);
     return newURL;
