@@ -146,11 +146,11 @@ app.get('/register', (req, res) => {
 
 
 app.post('/register', (req, res) => {
-    const id = generateRandomString(6);
+    const id = generateRandomString(6);  //function is in the helpers.js file
     const email = req.body.email;
     const prePassword = req.body.password;
     const password = bcrypt.hashSync(prePassword, salt);
-    if(getUserByEmail(email, users)){
+    if(getUserByEmail(email, users)){   //function is in the helpers.js file
         res.render('login');  
     } else {
         if (checkEmail(users, email, password)) {
@@ -179,7 +179,7 @@ app.get("/login", (req, res) => {
     res.render("login", templateVars);
   });
  
-//*do not touch or move!!!! It is magic!---------
+
 
 const matchKey = function(obj, key){
     for (let item in obj){
@@ -194,7 +194,7 @@ const matchKey = function(obj, key){
 app.post('/login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    if (validateUser(bcrypt, users, email, password)){
+    if (validateUser(bcrypt, users, email, password)){ //function is in the helpers.js file
         const id = matchKey(users, email);
         req.session.email = email;
         req.session.id = id;
@@ -207,10 +207,14 @@ app.post('/login', (req, res) => {
 
 // *************************************************************************************
 
-app.get("/u/:shortURL", (req, res) => {
-    // const longURL = urlDatabase[req.params.shortURL];
-    res.redirect(longURL);
-});
+app.get('/u/:shortURL', (req, res) => {
+    let sUrl = req.params.shortURL;
+    if (urlDatabase2[sUrl]) {
+      res.redirect(urlDatabase2[sUrl].longURL);
+    } else {
+      res.send('Short URL Not Found. Unable to redirect');
+    }
+  });
 
 app.listen(PORT, () => {
     console.log( `Example app listening on port ${PORT}!`);
